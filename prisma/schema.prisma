@@ -18,6 +18,7 @@ model AuthUser {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   name      String
+  password  String
 }
 
 model AuthUserRole {

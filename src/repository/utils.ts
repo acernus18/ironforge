@@ -1,5 +1,5 @@
 import {PrismaClient} from "@prisma/client";
-import {System} from "@/system/system";
+import {System} from "@/system";
 
 export async function echo() {
     const client: PrismaClient = System.getInstance().getDatabase();

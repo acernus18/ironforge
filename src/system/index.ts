@@ -20,4 +20,11 @@ export class System {
     public getDatabase() {
         return this.database;
     }
+
+    public async postFromClient(path: string, data: any) {
+        const response = await fetch(`${process.env["HOST_URL"]}${path}`, {
+            method: "POST", body: JSON.stringify(data)
+        });
+        return await response.json();
+    }
 }
