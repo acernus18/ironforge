@@ -1,0 +1,1 @@
+export const ErrSessionNotExist = "[100001]: session doesnt exist"
