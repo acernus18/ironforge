@@ -22,9 +22,12 @@ model AuthUser {
 }
 
 model AuthUserRole {
-  id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  userId    String
+  roleId    String
+
+  @@id([userId, roleId])
 }
 
 model AuthRole {
@@ -34,9 +37,12 @@ model AuthRole {
 }
 
 model AuthRolePrivilege {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  roleId      String
+  privilegeId String
+
+  @@id([roleId, privilegeId])
 }
 
 model AuthPrivilege {
@@ -46,7 +52,11 @@ model AuthPrivilege {
 }
 
 model AuthAPIPrivilege {
-  id        String   @id
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  privilegeId String
+  mothod      String
+  api         String
+
+  @@id([privilegeId, mothod, api])
 }

@@ -1,8 +1,8 @@
 import {createClient} from "redis";
 import {PrismaClient} from "@prisma/client";
-import {Session} from "@/types/models";
 import {Result} from "@/types/structs";
 import {ErrSessionNotExist} from "@/types/errors";
+import {SessionContext} from "@/models/session-context";
 
 export class System {
     private static readonly SessionKey = "ironforge:system:session";
@@ -37,30 +37,36 @@ export class System {
         return this.redis;
     }
 
-    public async setSession(id: string, session: Session) {
+    public async setSession(id: string, session: SessionContext) {
         const redis = await this.getRedis();
         await redis.hSet(System.SessionKey, id, JSON.stringify(session));
     }
 
-    public async getSession(id: string): Promise<Result<Session>> {
-        const result: Result<Session> = [null, null];
+    public async getSession(id: string): Promise<Result<SessionContext>> {
+        const result: Result<SessionContext> = [null, null];
         try {
             const redis = await this.getRedis();
             const session = await redis.hGet(System.SessionKey, id);
             if (!session) {
                 result[1] = new Error(ErrSessionNotExist);
             }
-            result[0] = JSON.parse(session!) as Session;
+            result[0] = System.deserialize(SessionContext, session!);
         } catch (err) {
             result[1] = err as Error;
         }
         return result;
     }
 
-    public async postFromClient(path: string, data: any) {
+    public static async postFromClient(path: string, data: any) {
         const response = await fetch(`${process.env["HOST_URL"]}${path}`, {
             method: "POST", body: JSON.stringify(data)
         });
         return await response.json();
+    }
+
+    public static deserialize<T extends object>(t: { new(): T }, json: string): T {
+        // To create a new object within a generic piece of code need to use the constructor function of the type.
+        // use t: { new(): T;}, instead of using t: T
+        return Object.assign(new t(), JSON.parse(json));
     }
 }

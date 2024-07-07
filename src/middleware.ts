@@ -13,7 +13,7 @@ async function cmsAuthenticating(request: NextRequest) {
     const [username, password] = atob(authValue).split(":");
 
     // Finding the user in the database
-    const user = await System.getInstance().postFromClient("/api/auth", {username: username});
+    const user = await System.postFromClient("/api/auth", {username: username});
     return user.username === username && user.password === password;
 }
 
