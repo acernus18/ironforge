@@ -69,4 +69,10 @@ export class System {
         // use t: { new(): T;}, instead of using t: T
         return Object.assign(new t(), JSON.parse(json));
     }
+
+    public static unique<T>(arr: T[]): T[] {
+        const result: T[] = [];
+        new Set(arr).forEach(v => result.push(v));
+        return result;
+    }
 }
