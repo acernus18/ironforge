@@ -1,19 +1,13 @@
 import {NextRequest, NextResponse} from "next/server";
-import {System} from "@/system";
+import {System} from "@/services/system";
 
 async function cmsAuthenticating(request: NextRequest) {
-    const basicAuth = request.headers.get("authorization");
-    if (!basicAuth) {
+    const [username, password] = System.getInfoFromAuthorization(request);
+    if (username === "" || password === "") {
         return false;
     }
-    // Extracting the value after 'Basic '
-    const authValue = basicAuth.split(" ")[1];
-
-    // Decoding the Base64-encoded credentials
-    const [username, password] = atob(authValue).split(":");
-
     // Finding the user in the database
-    const user = await System.postFromClient("/api/auth", {username: username});
+    const user = await System.post("/api/auth", {username: username}, true);
     return user.username === username && user.password === password;
 }
 

@@ -1,4 +1,4 @@
-import {SessionContext} from "@/models/session-context";
+import {SessionContext} from "@/services/models/session-context";
 
 test("111", () => {
     const session = new SessionContext();

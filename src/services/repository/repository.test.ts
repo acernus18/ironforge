@@ -1,8 +1,8 @@
-import {querySessionContext} from "@/repository/auth";
+import {querySessionContextWithCache} from "@/services/repository/auth";
 
 describe("Repository", () => {
     test("Test", async () => {
-        const [context, err] = await querySessionContext("admin");
+        const [context, err] = await querySessionContextWithCache("admin");
 
         console.log("Context =", context);
         console.log("Error =", err);

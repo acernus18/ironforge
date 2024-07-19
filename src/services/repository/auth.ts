@@ -1,7 +1,7 @@
-import {System} from "@/system";
-import {Result} from "@/types/structs";
-import {SessionContext} from "@/models/session-context";
-import {ErrUserNotExist} from "@/types/errors";
+import {System} from "@/services/system";
+import {Result} from "@/services/types/structs";
+import {SessionContext} from "@/services/models/session-context";
+import {ErrUserNotExist} from "@/services/types/errors";
 
 export async function querySessionContext(userId: string): Promise<Result<SessionContext>> {
     const result = new SessionContext();
@@ -33,4 +33,9 @@ export async function querySessionContext(userId: string): Promise<Result<Sessio
     }
     result.apiAccessible = System.unique(apiAccessible);
     return [result, null];
+}
+
+export async function querySessionContextWithCache(userId: string): Promise<Result<SessionContext>> {
+    const cacheKey = `${System.SessionKey}${userId}`;
+    return System.getInstance().cache(cacheKey, 3600, async () => querySessionContext(userId));
 }

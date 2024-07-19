@@ -1,7 +1,16 @@
-import {System} from "@/system";
 import {NextRequest, NextResponse} from "next/server";
 
-export async function GET() {
+import {System} from "@/services/system";
+import {querySessionContextWithCache} from "@/services/repository/auth";
+
+export async function GET(request: NextRequest) {
+    const [username] = System.getInfoFromAuthorization(request);
+    if (username !== "") {
+        const [result, err] = await querySessionContextWithCache(username);
+        if (result !== null && err === null) {
+            return Response.json(result);
+        }
+    }
     return new Response(null, {status: 401, headers: {"WWW-authenticate": 'Basic realm="Secure Area"'}});
 }
 
