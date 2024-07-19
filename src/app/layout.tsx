@@ -3,15 +3,8 @@ import {ConfigProvider, Layout} from "antd";
 import zhCN from "antd/locale/zh_CN";
 import {AntdRegistry} from "@ant-design/nextjs-registry";
 import {Content, Footer, Header} from "antd/es/layout/layout";
-import {useRemoteData} from "@/components/hooks/use-remote-data";
-import {SessionContext} from "@/services/models/session-context";
-import {Result} from "@/services/types/structs";
-import {AuthContext} from "@/components/context";
 
 export default function RootLayout({children}: Readonly<{ children: React.ReactNode; }>) {
-
-
-
     return (
         <html lang="en">
         <head>
@@ -20,10 +13,6 @@ export default function RootLayout({children}: Readonly<{ children: React.ReactN
         </head>
         <body style={{margin: "0"}}>
         <AntdRegistry>
-            {/*<AuthContext.Provider value={new SessionContext()}>*/}
-            {/*    */}
-            {/*</AuthContext.Provider>*/}
-
             <ConfigProvider
                 locale={zhCN}
                 theme={{

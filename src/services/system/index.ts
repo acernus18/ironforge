@@ -12,9 +12,11 @@ export class System {
     private readonly redis: ReturnType<typeof createClient>;
 
     private constructor() {
+        console.log("[System]: creating database client...");
         this.database = new PrismaClient({
             log: ["query", "info", "warn", "error"],
         });
+        console.log("[System]: creating database client successful");
         this.redis = createClient({
             url: process.env["REDIS_URL"],
         });
