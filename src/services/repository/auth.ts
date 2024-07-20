@@ -2,6 +2,7 @@ import {System} from "@/services/system";
 import {Result} from "@/services/types/structs";
 import {SessionContext} from "@/services/models/session-context";
 import {ErrUserNotExist} from "@/services/types/errors";
+import {Utils} from "@/services/utils";
 
 export async function querySessionContext(userId: string): Promise<Result<SessionContext>> {
     const result = new SessionContext();
@@ -23,7 +24,7 @@ export async function querySessionContext(userId: string): Promise<Result<Sessio
             privileges.push(privilege.privilegeId);
         }
     }
-    result.privileges = System.unique(privileges);
+    result.privileges = Utils.unique(privileges);
     const apiAccessible = [];
     for (const privilege of result.privileges) {
         const apiArray = await database.authAPIPrivilege.findMany({where: {privilegeId: privilege}});
@@ -31,11 +32,11 @@ export async function querySessionContext(userId: string): Promise<Result<Sessio
             apiAccessible.push(api.apiId);
         }
     }
-    result.apiAccessible = System.unique(apiAccessible);
+    result.apiAccessible = Utils.unique(apiAccessible);
     return [result, null];
 }
 
 export async function querySessionContextWithCache(userId: string): Promise<Result<SessionContext>> {
     const cacheKey = `${System.SessionKey}${userId}`;
-    return System.getInstance().cache(cacheKey, 3600, async () => querySessionContext(userId));
+    return System.getInstance().cache(cacheKey, 3600, async () => querySessionContext(userId), 1);
 }

@@ -40,14 +40,26 @@ export class System {
         return this.redis;
     }
 
-    public async cache<T>(key: string, expire: number, supplier: AsyncSupplier<T>): Promise<Result<T>> {
+    /**
+     * Caching supplier results to redis
+     * @param key key for redis storage
+     * @param expire time for cache exits
+     * @param supplier providing results
+     * @param mode 0 normal; 1 force cache; 2 force supplier;
+     */
+    public async cache<T>(key: string, expire: number, supplier: AsyncSupplier<T>, mode: number = 0): Promise<Result<T>> {
         try {
             const redis = await this.getRedis();
-            const response = await redis.get(key);
-            if (response !== null) {
-                const result = JSON.parse(response) as T;
-                console.log("[Cache]: hit redis cache, value =", result);
-                return [result, null];
+            if (mode !== 2) {
+                const response = await redis.get(key);
+                if (response !== null) {
+                    const result = JSON.parse(response) as T;
+                    console.log("[Cache]: hit redis cache, value =", result);
+                    return [result, null];
+                }
+                if (mode === 1) {
+                    return [null, null];
+                }
             }
             const [result, err] = await supplier();
             if (err !== null) {
@@ -59,36 +71,5 @@ export class System {
         } catch (e) {
             return [null, new Error(`${ErrCacheFail} ${e}`)];
         }
-    }
-
-    public static getInfoFromAuthorization(request: Request): [string, string] {
-        const basicAuth = request.headers.get("authorization");
-        if (!basicAuth) {
-            return ["", ""];
-        }
-        // Extracting the value after 'Basic '
-        const authValue = basicAuth.split(" ")[1];
-        // Decoding the Base64-encoded credentials
-        const [username, password] = atob(authValue).split(":");
-        return [username, password];
-    }
-
-    public static async post(path: string, data: any, fromServer: boolean = false) {
-        const response = await fetch(`${fromServer ? process.env["HOST_URL"] : ""}${path}`, {
-            method: "POST", body: JSON.stringify(data)
-        });
-        return await response.json();
-    }
-
-    public static deserialize<T extends object>(t: { new(): T }, json: string): T {
-        // To create a new object within a generic piece of code need to use the constructor function of the type.
-        // use t: { new(): T;}, instead of using t: T
-        return Object.assign(new t(), JSON.parse(json));
-    }
-
-    public static unique<T>(arr: T[]): T[] {
-        const result: T[] = [];
-        new Set(arr).forEach(v => result.push(v));
-        return result;
     }
 }

@@ -1,10 +1,11 @@
 import {NextRequest, NextResponse} from "next/server";
 
 import {System} from "@/services/system";
+import {Utils} from "@/services/utils";
 import {querySessionContextWithCache} from "@/services/repository/auth";
 
 export async function GET(request: NextRequest) {
-    const [username] = System.getInfoFromAuthorization(request);
+    const [username] = Utils.getInfoFromAuthorization(request);
     if (username !== "") {
         const [result, err] = await querySessionContextWithCache(username);
         if (result !== null && err === null) {
