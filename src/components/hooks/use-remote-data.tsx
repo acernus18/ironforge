@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 import {RemoteData} from "@/services/types/structs";
 import {AsyncSupplier} from "@/services/types/functions";

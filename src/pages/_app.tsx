@@ -1,14 +1,14 @@
 import React from "react";
 import {AppProps} from "next/app";
-import zhCN from "antd/locale/zh_CN";
-import "antd/dist/reset.css";
 import {ConfigProvider, Layout} from "antd";
+import {UserSessionContextProvider} from "@/components/context/user-session-context";
+// import zhCN from "antd/locale/zh_CN";
 
 export default function Index({Component, pageProps}: AppProps) {
     return (
-        <>
+        <UserSessionContextProvider>
             <ConfigProvider
-                locale={zhCN}
+                // locale={zhCN}
                 theme={{
                     token: {
                         // colorPrimary: "#08979c",
@@ -39,8 +39,6 @@ export default function Index({Component, pageProps}: AppProps) {
                     </Layout>
                 </Layout>
             </ConfigProvider>
-            {/*<Component {...pageProps} />*/}
-
-        </>
+        </UserSessionContextProvider>
     );
 }

@@ -18,16 +18,16 @@ async function cmsAuthenticating(request: NextRequest) {
 }
 
 export async function middleware(request: NextRequest) {
-    if (!request.nextUrl.pathname.startsWith("/api")) {
-        const url = request.nextUrl;
-        if (await cmsAuthenticating(request)) {
-            return NextResponse.next();
-        } else {
-            // Redirecting to an authentication endpoint if credentials are invalid or missing
-            url.pathname = "/api/auth/login";
-            // Redirecting the request
-            return NextResponse.rewrite(url);
-        }
-    }
+    // if (!request.nextUrl.pathname.startsWith("/api")) {
+    //     const url = request.nextUrl;
+    //     if (await cmsAuthenticating(request)) {
+    //         return NextResponse.next();
+    //     } else {
+    //         // Redirecting to an authentication endpoint if credentials are invalid or missing
+    //         url.pathname = "/api/auth/login";
+    //         // Redirecting the request
+    //         return NextResponse.rewrite(url);
+    //     }
+    // }
     return NextResponse.next();
 }
