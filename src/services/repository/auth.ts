@@ -13,6 +13,7 @@ export async function querySessionContext(userId: string): Promise<Result<Sessio
     }
     result.userId = authUser.id;
     result.userName = authUser.name;
+    result.password = authUser.password;
     const userRoles = await database.authUserRole.findMany({where: {userId: result.userId}});
     for (const role of userRoles) {
         result.roles.push(role.roleId);
@@ -36,7 +37,7 @@ export async function querySessionContext(userId: string): Promise<Result<Sessio
     return [result, null];
 }
 
-export async function querySessionContextWithCache(userId: string): Promise<Result<SessionContext>> {
+export async function querySessionContextWithCache(userId: string, forceCache: boolean): Promise<Result<SessionContext>> {
     const cacheKey = `${System.SessionKey}${userId}`;
-    return System.getInstance().cache(cacheKey, 3600, async () => querySessionContext(userId), 1);
+    return System.getInstance().cache(cacheKey, 3600, async () => querySessionContext(userId), forceCache ? 1 : 0);
 }

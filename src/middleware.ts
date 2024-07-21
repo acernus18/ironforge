@@ -2,7 +2,7 @@ import {NextRequest, NextResponse} from "next/server";
 import {Utils} from "@/services/utils";
 
 async function cmsAuthenticating(request: NextRequest) {
-    const [username, password] = Utils.getInfoFromAuthorization(request);
+    const [username, password] = Utils.getInfoFromAuthorization(request.headers.get("authorization"));
     console.log("cmsAuthenticating getInfoFromAuthorization =", username, password);
     if (username === "" || password === "") {
         return false;
@@ -12,7 +12,7 @@ async function cmsAuthenticating(request: NextRequest) {
         exist: boolean,
         username: string,
         password: string
-    }>("/api/auth", {username: username}, true);
+    }>("/api/auth/login", {username: username}, true);
     console.log("cmsAuthenticating getUser =", user);
     return user.username === username && user.password === password;
 }
@@ -24,7 +24,7 @@ export async function middleware(request: NextRequest) {
             return NextResponse.next();
         } else {
             // Redirecting to an authentication endpoint if credentials are invalid or missing
-            url.pathname = "/api/auth";
+            url.pathname = "/api/auth/login";
             // Redirecting the request
             return NextResponse.rewrite(url);
         }

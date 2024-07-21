@@ -1,6 +1,7 @@
 export class Utils {
-    public static getInfoFromAuthorization(request: Request): [string, string] {
-        const basicAuth = request.headers.get("authorization");
+    public static getInfoFromAuthorization(header: string | null): [string, string] {
+        // const basicAuth = request.headers.get("authorization");
+        const basicAuth = header;
         if (!basicAuth) {
             return ["", ""];
         }
@@ -19,6 +20,13 @@ export class Utils {
     public static async post<T>(path: string, data: any, fromServer: boolean = false): Promise<T> {
         const response = await fetch(`${fromServer ? process.env["HOST_URL"] : ""}${path}`, {
             method: "POST", body: JSON.stringify(data)
+        });
+        return await response.json() as T;
+    }
+
+    public static async put<T>(path: string, data: any, fromServer: boolean = false): Promise<T> {
+        const response = await fetch(`${fromServer ? process.env["HOST_URL"] : ""}${path}`, {
+            method: "PUT", body: JSON.stringify(data)
         });
         return await response.json() as T;
     }

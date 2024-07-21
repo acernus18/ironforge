@@ -14,10 +14,10 @@ describe("System Test", () => {
     // });
 
     test("Deserialize", async () => {
-        // const session = new SessionContext();
+        // const session = new UserSessionContext();
         // session.userId = "111";
         // const serialized = JSON.stringify(session);
-        // const target = System.deserialize(SessionContext, serialized)
+        // const target = System.deserialize(UserSessionContext, serialized)
         // console.log(target);
 
 

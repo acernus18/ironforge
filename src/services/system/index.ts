@@ -35,7 +35,9 @@ export class System {
 
     public async getRedis() {
         if (!this.redis.isReady) {
+            console.log("[System]: connecting redis for first place...");
             await this.redis.connect();
+            console.log("[System]: connecting redis successful");
         }
         return this.redis;
     }
@@ -65,8 +67,9 @@ export class System {
             if (err !== null) {
                 return [null, err];
             }
-            console.log("Cache: miss redis cache, value =", result);
+            console.log("[Cache]: miss redis cache, value =", result);
             await redis.setEx(key, expire, JSON.stringify(result));
+            console.log("[Cache]: caching value successful");
             return [result, null];
         } catch (e) {
             return [null, new Error(`${ErrCacheFail} ${e}`)];
