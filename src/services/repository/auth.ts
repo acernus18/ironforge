@@ -1,5 +1,5 @@
 import {System} from "@/services/system";
-import {Result} from "@/services/types/structs";
+import {Result} from "@/common/structs";
 import {SessionContext} from "@/services/models/session-context";
 import {ErrUserNotExist} from "@/services/types/errors";
 import {Utils} from "@/services/utils";

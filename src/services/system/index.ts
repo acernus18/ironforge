@@ -1,9 +1,9 @@
 import {createClient} from "redis";
 import {PrismaClient} from "@prisma/client";
 
-import {Result} from "@/services/types/structs";
+import {Result} from "@/common/structs";
 import {ErrCacheFail} from "@/services/types/errors";
-import {AsyncSupplier} from "@/services/types/functions";
+import {AsyncSupplier} from "@/common/functions";
 
 export class System {
     public static readonly SessionKey = "ironforge:system:session:";

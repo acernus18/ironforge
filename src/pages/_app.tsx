@@ -29,12 +29,6 @@ export default function Index({Component, pageProps}: AppProps) {
                             <Layout.Content style={{padding: 24, minHeight: "81vh", background: "#fff"}}>
                                 <Component {...pageProps} />
                             </Layout.Content>
-                            <Layout.Footer style={{textAlign: "center"}}>
-                                备案号: <a href={"https://beian.miit.gov.cn/"}>粤ICP备2021175635号-1</a>
-                                <p style={{marginTop: 10}}>
-                                    Copyright © 2022 Maples. All rights reserved.
-                                </p>
-                            </Layout.Footer>
                         </Layout>
                     </Layout>
                 </Layout>

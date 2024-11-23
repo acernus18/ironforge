@@ -1,6 +1,6 @@
 import React from "react";
-import {RemoteData} from "@/services/types/structs";
-import {AsyncSupplier} from "@/services/types/functions";
+import {RemoteData} from "@/common/structs";
+import {AsyncSupplier} from "@/common/functions";
 
 export function useRemoteData<T>(def: T, supplier: AsyncSupplier<T>): RemoteData<T> {
     // Initializing Default Data

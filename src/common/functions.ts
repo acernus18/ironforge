@@ -1,4 +1,4 @@
-import {Result} from "@/services/types/structs";
+import {Result} from "@/common/structs";
 
 // Functions without Result;
 
