@@ -14,73 +14,10 @@ datasource db {
 }
 
 model AuthUser {
-  id        String   @id
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  name      String
-  password  String
-
-  AuthUserRole AuthUserRole[]
-}
-
-model AuthUserRole {
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  userId    String
-  roleId    String
-
-  user AuthUser @relation(fields: [userId], references: [id])
-  role AuthRole @relation(fields: [roleId], references: [id])
-
-  @@id([userId, roleId])
-}
-
-model AuthRole {
-  id        String   @id
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  AuthUserRole      AuthUserRole[]
-  AuthRolePrivilege AuthRolePrivilege[]
-}
-
-model AuthRolePrivilege {
+  id          Int      @id @default(autoincrement())
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  roleId      String
-  privilegeId String
-
-  role      AuthRole      @relation(fields: [roleId], references: [id])
-  privilege AuthPrivilege @relation(fields: [privilegeId], references: [id])
-
-  @@id([roleId, privilegeId])
-}
-
-model AuthPrivilege {
-  id        String   @id
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  AuthRolePrivilege AuthRolePrivilege[]
-  AuthAPIPrivilege  AuthAPIPrivilege[]
-}
-
-model AuthAPIPrivilege {
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  privilegeId String
-  apiId       String
-
-  privilege AuthPrivilege @relation(fields: [privilegeId], references: [id])
-  api       AuthAPI       @relation(fields: [apiId], references: [id])
-
-  @@id([privilegeId, apiId])
-}
-
-model AuthAPI {
-  id        String   @id
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  AuthAPIPrivilege AuthAPIPrivilege[]
+  userId      String
+  properties  Json
+  credentials Json
 }

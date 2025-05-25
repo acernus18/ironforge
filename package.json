@@ -13,7 +13,9 @@
   },
   "dependencies": {
     "@prisma/client": "5.16.1",
+    "acernus-rune": "1.0.3-beta",
     "antd": "5.19.3",
+    "cos-nodejs-sdk-v5": "^2.14.7",
     "lodash": "4.17.21",
     "next": "14.2.4",
     "react": "18.3.1",

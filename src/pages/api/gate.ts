@@ -1,11 +1,6 @@
 import {NextApiRequest, NextApiResponse} from "next";
+import {Services} from "@/services";
 
-// function route()
-
-export default async function handler(request: NextApiRequest, response: NextApiResponse) {
-    if (request.method !== "POST") {
-        response.status(404);
-        response.end();
-        return;
-    }
+export default async function handler(req: NextApiRequest, resp: NextApiResponse) {
+    await Services.getInstance().proceed(req, resp);
 }

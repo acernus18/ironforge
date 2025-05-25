@@ -1,21 +1,20 @@
 import {NextRequest, NextResponse} from "next/server";
-import {Utils} from "@/services/utils";
 
-async function cmsAuthenticating(request: NextRequest) {
-    const [username, password] = Utils.getInfoFromAuthorization(request.headers.get("authorization"));
-    console.log("cmsAuthenticating getInfoFromAuthorization =", username, password);
-    if (username === "" || password === "") {
-        return false;
-    }
-    // Finding the user in the database
-    const user = await Utils.post<{
-        exist: boolean,
-        username: string,
-        password: string
-    }>("/api/auth/login", {username: username}, true);
-    console.log("cmsAuthenticating getUser =", user);
-    return user.username === username && user.password === password;
-}
+// async function cmsAuthenticating(request: NextRequest) {
+//     const [username, password] = Utils.getInfoFromAuthorization(request.headers.get("authorization"));
+//     console.log("cmsAuthenticating getInfoFromAuthorization =", username, password);
+//     if (username === "" || password === "") {
+//         return false;
+//     }
+//     // Finding the user in the database
+//     const user = await Utils.post<{
+//         exist: boolean,
+//         username: string,
+//         password: string
+//     }>("/api/auth/login", {username: username}, true);
+//     console.log("cmsAuthenticating getUser =", user);
+//     return user.username === username && user.password === password;
+// }
 
 export async function middleware(request: NextRequest) {
     // if (!request.nextUrl.pathname.startsWith("/api")) {
