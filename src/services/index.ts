@@ -1,9 +1,6 @@
 import {NextApiRequest, NextApiResponse} from "next";
 import {Rune} from "acernus-rune";
 
-import {Application} from "@/application";
-import {login} from "@/services/auth-service";
-
 export class Services {
     // Singleton pattern Static
     private static instance: Services;
@@ -19,10 +16,9 @@ export class Services {
     private provider: Rune.ServiceProvider;
 
     private constructor() {
-        const servicesMap = new Map<string, Rune.Service>();
-        servicesMap.set("auth/login", login);
-        const sessionProvider = async (sid: string) => await Application.getInstance().fetchSessionFromCache(sid);
-        this.provider = new Rune.ServiceProvider(sessionProvider, servicesMap);
+        this.provider = new Rune.ServiceProvider(new Map<string, Rune.Service>([
+            ["system/health", async (context) => [context, null]],
+        ]));
     }
 
     public async proceed(req: NextApiRequest, resp: NextApiResponse) {

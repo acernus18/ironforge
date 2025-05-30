@@ -3,9 +3,6 @@ import {PrismaClient} from "@prisma/client";
 import {Rune} from "acernus-rune";
 
 export class Application {
-    // Application Configs
-    private static readonly SESSION_EXPIRE = 3000;
-    public static readonly SESSION_KEY = "ironforge:system:session:";
 
     // Singleton pattern Static
     private static instance: Application;
@@ -53,6 +50,7 @@ export class Application {
      * @param supplier providing results
      */
     public async cache<T>(key: string, expire: number, force: boolean, supplier?: () => Rune.AsyncResult<T>): Promise<Rune.Result<T>> {
+        const cacheKey = `ironforge::cache::${key}`;
         try {
             const redis = await this.getRedis();
             let result = null;
@@ -66,11 +64,11 @@ export class Application {
                     return [null, err];
                 }
                 console.log("[Cache]: caching, value =", result);
-                await redis.setEx(key, expire, JSON.stringify(result));
+                await redis.setEx(cacheKey, expire, JSON.stringify(result));
                 return [result, null];
             }
 
-            const response = await redis.get(key);
+            const response = await redis.get(cacheKey);
             if (response !== null) {
                 result = JSON.parse(response) as T;
                 console.log("[Cache]: hit redis cache, value =", result);
@@ -84,19 +82,11 @@ export class Application {
                 return [null, err];
             }
             console.log("[Cache]: miss redis cache, value =", result);
-            await redis.setEx(key, expire, JSON.stringify(result));
+            await redis.setEx(cacheKey, expire, JSON.stringify(result));
             console.log("[Cache]: caching value successful");
             return [result, null];
         } catch (e) {
-            return [null, new Rune.Exception("", -1, "")];
+            return [null, new Rune.Exception("", -1, "Cache Failed")];
         }
-    }
-
-    public async fetchSessionFromCache(sid: string): Promise<Rune.Result<Rune.SessionProtocol>> {
-        const [session, err] = await this.cache<Rune.SessionProtocol>(sid, Application.SESSION_EXPIRE, false);
-        if (err !== null) {
-            return [null, err];
-        }
-        return [session, null];
     }
 }
